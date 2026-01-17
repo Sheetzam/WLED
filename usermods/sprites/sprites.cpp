@@ -305,7 +305,7 @@ static uint16_t mode_sprites(void) {
   return FRAMETIME;
 }
 
-static const char _data_FX_MODE_SPRITES[] PROGMEM = "Sprites@!,,,,,;;Color;;2;pal=35";
+static const char _data_FX_MODE_SPRITES[] PROGMEM = "Sprites@!,,,,,;;;2;";
 
 
 /////////////////////
