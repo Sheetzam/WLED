@@ -3,9 +3,8 @@
 // for information how FX metadata strings work see https://kno.wled.ge/interfaces/json-api/#effect-metadata
 
 // static effect, used if an effect fails to initialize
-static uint16_t mode_static(void) {
+static void mode_static(void) {
   SEGMENT.fill(SEGCOLOR(0));
-  return strip.isOffRefreshRequired() ? FRAMETIME : 350;
 }
 
 const uint8_t noDirection = 0;
@@ -48,9 +47,9 @@ struct aColor theBackground;
 //  User FX functions  //
 /////////////////////////
 
-static uint16_t mode_sprites(void) {
+static void mode_sprites(void) {
   if (!strip.isMatrix || !SEGMENT.is2D())
-    return mode_static();  // not a 2D set-up
+    { mode_static(); return; }  // not a 2D set-up
 
   const int cols = SEG_W;
   const int rows = SEG_H;
@@ -67,7 +66,7 @@ static uint16_t mode_sprites(void) {
   // theBackground, a single aColor structure
   unsigned dataSize = sizeof(theStep) + sizeof(aSprite) * numSprites + cols * rows + sizeof(working_background) + sizeof(aColor);
   if (!SEGENV.allocateData(dataSize))
-    return mode_static();  // allocation failed
+    { mode_static(); return; }  // allocation failed
   uint8_t* theStep = reinterpret_cast<uint8_t*>(SEGENV.data);
   aSprite* ourSprites = reinterpret_cast<aSprite*>(SEGENV.data + sizeof(uint8_t));
   auto theField = reinterpret_cast<uint8_t*>(SEGENV.data + sizeof(uint8_t) + sizeof(aSprite) * numSprites);
@@ -302,7 +301,6 @@ static uint16_t mode_sprites(void) {
     }
   }
   (*theStep)++;
-  return FRAMETIME;
 }
 
 static const char _data_FX_MODE_SPRITES[] PROGMEM = "Sprites@!,,,,,;;;2;";
